@@ -66,14 +66,18 @@ export default function VeritasVote() {
           <div className="flex items-center gap-4">
             {isConnected ? (
               <div className="flex items-center gap-3 bg-slate-800/50 p-1.5 pr-4 rounded-2xl border border-slate-700/50">
-                <div className="h-8 w-8 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center font-bold text-xs">
+                <div className="h-8 w-8 bg-linear-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center font-bold text-xs">
                   {address?.slice(2,4).toUpperCase()}
                 </div>
                 <div className="hidden sm:block">
                   <p className="text-[10px] text-slate-500 font-bold leading-none">CONNECTED</p>
                   <p className="text-xs font-mono text-blue-400">{address?.slice(0,6)}...{address?.slice(-4)}</p>
                 </div>
-                <button onClick={() => disconnect()} className="ml-2 p-2 hover:bg-red-500/10 text-slate-400 hover:text-red-500 rounded-lg transition-colors">
+                <button 
+                  onClick={() => disconnect()} 
+                  title="Logout" 
+                  className="ml-2 p-2 hover:bg-red-500/10 text-slate-400 hover:text-red-500 rounded-lg transition-colors"
+                >
                   <LogOut size={18} />
                 </button>
               </div>
@@ -94,7 +98,7 @@ export default function VeritasVote() {
               <Activity size={14} className="animate-pulse" /> UNIVERSITAS DINAMIKA BANGSA
             </div>
             <h1 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tight mb-6">
-              Masa Depan <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Demokrasi Kampus</span>
+              Masa Depan <br /> <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Demokrasi Kampus</span>
             </h1>
             <p className="text-slate-400 text-lg max-w-xl leading-relaxed">
               Platform voting on-chain pertama yang menjamin keamanan suara melalui 
@@ -103,11 +107,11 @@ export default function VeritasVote() {
           </div>
           
           <div className="w-full lg:w-96 grid grid-cols-2 gap-4">
-            <div className="bg-slate-800/40 p-6 rounded-[2rem] border border-slate-700/50">
+            <div className="bg-slate-800/40 p-6 rounded-4xl border border-slate-700/50">
               <p className="text-3xl font-black text-white">{kandidatList?.length || 0}</p>
               <p className="text-slate-500 text-xs font-bold uppercase mt-1">Kandidat</p>
             </div>
-            <div className="bg-slate-800/40 p-6 rounded-[2rem] border border-slate-700/50 text-blue-400">
+            <div className="bg-slate-800/40 p-6 rounded-4xl border border-slate-700/50 text-blue-400">
               <Fingerprint size={32} />
               <p className="text-slate-500 text-xs font-bold uppercase mt-4">Verified On-Chain</p>
             </div>
@@ -175,8 +179,8 @@ export default function VeritasVote() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {kandidatList?.map((k) => (
-            <div key={k.id.toString()} className="bg-slate-900 border border-slate-800 rounded-[3rem] p-8 hover:border-blue-500/50 transition-all duration-500 group relative">
-              <div className="h-20 w-20 bg-slate-800 rounded-[2rem] flex items-center justify-center mb-8 mx-auto group-hover:scale-110 group-hover:bg-blue-600 transition-all duration-500 shadow-xl shadow-black/20">
+            <div key={k.id.toString()} className="bg-slate-900 border border-slate-800 rounded-4xl p-8 hover:border-blue-500/50 transition-all duration-500 group relative">
+              <div className="h-20 w-20 bg-slate-800 rounded-4xl flex items-center justify-center mb-8 mx-auto group-hover:scale-110 group-hover:bg-blue-600 transition-all duration-500 shadow-xl shadow-black/20">
                 <UserCircle2 size={40} className="text-slate-500 group-hover:text-white" />
               </div>
               
@@ -192,7 +196,7 @@ export default function VeritasVote() {
                 <button 
                   disabled={isPending || userHasVoted as boolean} 
                   onClick={() => writeContract({ abi: ABI, address: CONTRACT_ADDRESS, functionName: 'berikanSuara', args: [k.id] })} 
-                  className={`w-full py-5 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-3 ${
+                  className={`w-full py-5 rounded-4xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-3 ${
                     userHasVoted 
                     ? 'bg-slate-800 text-slate-600 border border-slate-700 cursor-not-allowed' 
                     : 'bg-blue-600 text-white hover:bg-blue-500 shadow-xl shadow-blue-900/40 active:scale-95'
@@ -205,7 +209,7 @@ export default function VeritasVote() {
           ))}
 
           {(!kandidatList || kandidatList.length === 0) && (
-            <div className="col-span-full py-32 bg-slate-900/50 border-2 border-dashed border-slate-800 rounded-[4rem] text-center">
+            <div className="col-span-full py-32 bg-slate-900/50 border-2 border-dashed border-slate-800 rounded-4xl text-center">
               <Activity size={48} className="mx-auto text-slate-700 mb-6" />
               <p className="text-slate-500 font-black text-xl uppercase tracking-tighter italic">Belum Ada Kandidat Terdaftar</p>
             </div>
@@ -214,7 +218,7 @@ export default function VeritasVote() {
       </main>
 
       <footer className="max-w-7xl mx-auto px-6 py-20 border-t border-slate-800 text-center">
-        <p className="text-slate-600 text-sm font-bold uppercase tracking-[0.5em]">Powered by Etehereum Ecosystem 2026</p>
+        <p className="text-slate-600 text-sm font-bold uppercase tracking-[0.5em]">Powered by Ethereum Ecosystem 2026</p>
       </footer>
     </div>
   )
