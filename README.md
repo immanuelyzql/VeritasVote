@@ -116,5 +116,3 @@ Untuk berinteraksi dengan protokol di jaringan lokal:
 Naufal
 
     GitHub: @NaufalAufaaAbyan
-
-    Ecosystem: Universitas Dinamika Bangsa | Superteam Indonesia
