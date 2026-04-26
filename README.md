@@ -131,7 +131,17 @@ Pastikan Anda telah menginstal perangkat lunak berikut:
 
 ---
 
-## 👤 Solo Developer
-**Naufal Aufaa Abyan**
-- **GitHub**: [@NaufalAufaaAbyan](https://github.com/NaufalAufaaAbyan)
-- **Institution**: Universitas Dinamika Bangsa
+ 🚀 VeritasVote - Panduan Penggunaan
+
+## 🎮 Panduan Penggunaan (Alur Kerja)
+- **1. Jalankan Blockchain Lokal (Terminal 1)**: Buka terminal di folder `blockchain` dan jalankan perintah `anvil`. Biarkan terminal ini tetap terbuka karena Akun (0) akan bertindak sebagai Admin.
+- **2. Deploy Smart Contract (Terminal 2)**: Buka tab terminal baru di folder `blockchain`. Jalankan perintah `forge create --rpc-url http://127.0.0.1:8545 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 src/VeritasVote.sol:VeritasVote --broadcast`. Salin alamat `Deployed to: 0x...` yang muncul.
+- **3. Sinkronisasi dengan Frontend (VS Code)**: Buka file `web-app/src/app/page.tsx`, cari variabel `CONTRACT_ADDRESS`, dan tempelkan alamat kontrak dari langkah sebelumnya. Pastikan file sudah disimpan.
+- **4. Jalankan Aplikasi Web (Terminal 2)**: Masuk ke folder `web-app` (`cd ../web-app`) dan jalankan `npm run dev` untuk menyalakan server lokal.
+- **5. Setup MetaMask di Browser**: Akses `http://localhost:3000`. Tambahkan jaringan lokal (RPC: `http://127.0.0.1:8545`, Chain ID: `31337`). Import Private Key Akun (0) dari Anvil sebagai Admin dan Akun (1/2) sebagai Pemilih.
+- **6. Mulai Simulasi Voting (Selesai!)**: Gunakan Akun Admin untuk registrasi kandidat. Ganti akun ke Pemilih untuk memberikan suara. Kembali ke Admin untuk klik "Tutup Sesi" agar reward 2 ETH terkirim otomatis.
+
+## 🛡️ Fitur Keamanan (Security Features)
+- **Sybil Resistance**: Validasi ketat satu-suara-per-alamat (Strict one-vote-per-address validation).
+- **State-Locking**: Voting dan registrasi dikunci otomatis saat sesi berakhir (Voting and registration are locked once the session is finalized).
+- **Access Control**: Fungsi krusial dilindungi oleh modifier `hanyaAdmin` (Critical functions are protected by `onlyAdmin` modifier).# VeritasVote

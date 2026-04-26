@@ -8,7 +8,7 @@ import {
   RefreshCw, LayoutDashboard, Fingerprint, Activity 
 } from 'lucide-react'
 
-// PASTIIN ALAMAT INI SAMA DENGAN HASIL DEPLOY DI TERMINAL!
+// Pastikan alamat kontrak ini sesuai dengan hasil deployment terakhir di jaringan.
 const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
 const ABI = [
@@ -32,7 +32,7 @@ export default function VeritasVote() {
   const [confirmFinish, setConfirmFinish] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  // Mencegah hydration error
+  // Resolusi isu hydration pada Next.js
   useEffect(() => { setMounted(true) }, [])
 
   const { data: adminAddr, refetch: refetchAdmin } = useReadContract({ abi: ABI, address: CONTRACT_ADDRESS, functionName: 'admin' })
@@ -43,7 +43,7 @@ export default function VeritasVote() {
     query: { enabled: !!address } 
   })
 
-  // LOGIKA ADMIN: Paksa True jika menggunakan Wallet Anvil (0) atau jika terdeteksi di kontrak
+  // Validasi Otoritas Admin: Mengizinkan akses untuk akun pengembang lokal (Anvil 0) atau admin kontrak yang terverifikasi.
   const ADMIN_ANVIL_0 = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
   const isAdmin = address?.toLowerCase() === ADMIN_ANVIL_0.toLowerCase() || 
                   (address && adminAddr && address.toLowerCase() === (adminAddr as string).toLowerCase())
@@ -120,7 +120,7 @@ export default function VeritasVote() {
           </div>
         </div>
 
-        {/* ADMIN PANEL: Muncul Jika Konek Sebagai Akun (0) */}
+        {/* Panel Kontrol Administrator: Hanya dapat diakses oleh akun dengan otoritas Admin */}
         {isAdmin && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
             <div className="md:col-span-2 bg-slate-900 border border-slate-800 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden text-white">
@@ -131,14 +131,14 @@ export default function VeritasVote() {
               {!isEnded ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 relative z-10">
                   <input placeholder="Nama Lengkap" className="bg-slate-800/50 border border-slate-700 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-white" value={form.nama} onChange={e => setForm({...form, nama: e.target.value})} />
-                  <input placeholder="Wallet Address (0x...)" className="bg-slate-800/50 border border-slate-700 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-mono text-sm text-white" value={form.wallet} onChange={e => setForm({...form, wallet: e.target.value})} />
+                  <input placeholder="Alamat Dompet (0x...)" className="bg-slate-800/50 border border-slate-700 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-mono text-sm text-white" value={form.wallet} onChange={e => setForm({...form, wallet: e.target.value})} />
                   <button disabled={isPending} onClick={() => writeContract({ abi: ABI, address: CONTRACT_ADDRESS, functionName: 'tambahKandidat', args: [form.nama, form.wallet as `0x${string}`] })} className="sm:col-span-2 bg-white text-slate-900 font-black py-4 rounded-2xl hover:bg-blue-400 transition-all flex items-center justify-center gap-2">
-                    {isPending ? <Loader2 className="animate-spin" /> : <><Plus size={20}/> Daftarkan Kandidat Sekarang</>}
+                    {isPending ? <Loader2 className="animate-spin" /> : <><Plus size={20}/> Eksekusi Registrasi</>}
                   </button>
                 </div>
               ) : (
                 <div className="bg-blue-500/10 border border-blue-500/20 p-6 rounded-2xl text-center">
-                  <p className="text-blue-400 font-bold">Sesi voting telah berakhir.</p>
+                  <p className="text-blue-400 font-bold">Sesi pemilihan telah ditutup secara resmi.</p>
                 </div>
               )}
             </div>
@@ -146,15 +146,15 @@ export default function VeritasVote() {
             <div className="bg-slate-900 border border-slate-800 rounded-[2.5rem] p-8 flex flex-col justify-between">
               <div>
                 <h3 className="text-xl font-black text-white mb-2 uppercase">Finalisasi</h3>
-                <p className="text-slate-500 text-sm italic">Distribusi reward 2 ETH ke pemenang suara terbanyak.</p>
+                <p className="text-slate-500 text-sm italic">Eksekusi distribusi hadiah sebesar 2 ETH kepada pemenang.</p>
               </div>
               {!isEnded ? (
                 <button onClick={() => { if (!confirmFinish) { setConfirmFinish(true); setTimeout(() => setConfirmFinish(false), 3000); } else { writeContract({ abi: ABI, address: CONTRACT_ADDRESS, functionName: 'selesaikanPemilihan' }); setConfirmFinish(false); } }} className={`w-full py-5 rounded-2xl font-black flex items-center justify-center gap-3 transition-all duration-300 ${confirmFinish ? 'bg-orange-600 scale-105' : 'bg-slate-800 hover:bg-slate-700'} text-white shadow-xl`}>
-                  {confirmFinish ? 'KONFIRMASI AKHIR' : <><Trophy size={20} className="text-yellow-500" /> Tutup Sesi</>}
+                  {confirmFinish ? 'KONFIRMASI EKSEKUSI' : <><Trophy size={20} className="text-yellow-500" /> Tutup Sesi Pemilihan</>}
                 </button>
               ) : (
                 <button onClick={() => writeContract({ abi: ABI, address: CONTRACT_ADDRESS, functionName: 'resetVoting' })} className="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white py-5 rounded-2xl font-black flex items-center justify-center gap-3 transition-all border border-red-500/20">
-                  <RefreshCw size={20} className={isPending ? 'animate-spin' : ''} /> Reset Sesi
+                  <RefreshCw size={20} className={isPending ? 'animate-spin' : ''} /> Inisialisasi Ulang Sesi
                 </button>
               )}
             </div>
@@ -189,14 +189,14 @@ export default function VeritasVote() {
           {(!kandidatList || kandidatList.length === 0) && (
             <div className="col-span-full py-32 bg-slate-900/50 border-2 border-dashed border-slate-800 rounded-4xl text-center">
               <Activity size={48} className="mx-auto text-slate-700 mb-6 animate-pulse" />
-              <p className="text-slate-500 font-black text-xl uppercase tracking-tighter italic opacity-50">Belum Ada Kandidat Terdaftar</p>
+              <p className="text-slate-500 font-black text-xl uppercase tracking-tighter italic opacity-50">Belum Ada Data Kandidat Terdaftar</p>
             </div>
           )}
         </div>
       </main>
 
       <footer className="max-w-7xl mx-auto px-6 py-20 border-t border-slate-800 text-center">
-        <p className="text-slate-600 text-[10px] font-bold uppercase tracking-[0.5em] italic">Developed by Naufal Aufaa Abyan - UNAMA 2026</p>
+        <p className="text-slate-600 text-[10px] font-bold uppercase tracking-[0.5em] italic">VERITASVOTE DECENTRALIZED PROTOCOL &copy; 2026</p>
       </footer>
     </div>
   )

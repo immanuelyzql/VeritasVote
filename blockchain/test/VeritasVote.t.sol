@@ -19,10 +19,11 @@ contract VeritasVoteTest is Test {
         vm.prank(admin);
         vote.tambahKandidat("Budi", payable(kandidat1));
         
-        // GANTI CARA AMBIL DATA:
-        VeritasVote.Kandidat memory k = vote.getKandidat(1);
-        assertEq(k.nama, "Budi");
-        assertEq(k.id, 1);
+        // Mengambil data menggunakan tuple dari mapping daftarKandidat
+        (uint256 id, string memory nama, , ) = vote.daftarKandidat(1);
+        
+        assertEq(nama, "Budi");
+        assertEq(id, 1);
     }
 
     function testGagalVoteDuaKali() public {
@@ -32,7 +33,7 @@ contract VeritasVoteTest is Test {
         vm.prank(pemilih1);
         vote.berikanSuara(1);
 
-        vm.expectRevert("Anda sudah memberikan suara sebelumnya!");
+        vm.expectRevert("Sudah Vote");
         vm.prank(pemilih1);
         vote.berikanSuara(1);
     }
